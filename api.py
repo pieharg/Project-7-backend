@@ -204,7 +204,7 @@ def retrieve_metric_1():
     Retrieves the client income from front and returns the m1 metric
     m1 metric defines your position in % in the income distribution from the databse
     """
-    income = int(flask.request.args.get('amt_income'))
+    income = float(flask.request.args.get('amt_income'))
     m1 = df.loc[df['AMT_INCOME_TOTAL']<income].shape[0]/df.shape[0]*100
     return flask.jsonify(m1)
 
@@ -214,7 +214,7 @@ def retrieve_metric_2():
     Retrieves the client income from front and returns the m2 metric
     m2 metric defines the credit amount of people WHO GOT THE LOAN in your income range (+/- 5%)
     """
-    income = int(flask.request.args.get('amt_income'))
+    income = float(flask.request.args.get('amt_income'))
     m2 = df.loc[df['TARGET']==0].loc[df['AMT_INCOME_TOTAL']>0.95*income].loc[df['AMT_INCOME_TOTAL']<1.05*income]['AMT_CREDIT'].mean()
     return flask.jsonify(m2)
 
@@ -224,7 +224,7 @@ def retrieve_metric_3():
     Retrieves the client income from front and returns the m3 metric
     m3 metric defines the annuity amount of people WHO GOT THE LOAN in your income range (+/- 5%)
     """
-    income = int(flask.request.args.get('amt_income'))
+    income = float(flask.request.args.get('amt_income'))
     m3 = df.loc[df['TARGET']==0].loc[df['AMT_INCOME_TOTAL']>0.95*income].loc[df['AMT_INCOME_TOTAL']<1.05*income]['AMT_ANNUITY'].mean()
     return flask.jsonify(m3)
 
