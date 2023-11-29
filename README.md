@@ -69,7 +69,7 @@ Le projet est un prototype d'application de *"scoring crédit"*  pour calculer l
 
 Il est à noter qu'il y a des incohérences dans les prédictions. Par exemple dans certaines situations, faire augmenter le salaire en gardant les autres paramètres fixes peut faire baisser le score ce qui est contre-intuitif voire illogique dans notre situation. Le pipeline utilisé dans l'API (appelé *pipeline_backend.joblib*) a été développé de la même manière que celui en sortie du notebook appelé *pipeline_p7.joblib* à la différence que seules les 10 variables utilisées dans le front-end ont servi à son entraînement. 
 
-Cela faisait simplement peu de sens de servir du pipeline_p7 construit dans le notebook quand celui-ci prend en entrée un vecteur (795,) alors que n'utilisons dans les faits que 4 ou 10 variables pour effectuer des prédictions "à la volée".
+Cela faisait simplement peu de sens de servir du pipeline_p7 construit dans le notebook quand celui-ci prend en entrée un vecteur (795,) alors que n'utilisons dans les faits que 4 ou 10 variables pour effectuer des prédictions à la volée.
 
 Le prix à payer est que le pipeline construit spécifiquement pour l'API obtient un score [AUC](https://machine-learning.paperspace.com/wiki/auc-area-under-the-roc-curve) plus faible que son "grand-frère" car entraîné sur une quantité bien plus faible de données et souffre en plus d'over-fitting :
 * <u>Score AUC pipeline_p7</u>
@@ -81,3 +81,9 @@ Le prix à payer est que le pipeline construit spécifiquement pour l'API obtien
 <br> Jeu de test : 0.62
 
 Cela n'a finalement pas vraiment d'importance car l'application n'est qu'un début de POC (*Proof of Concept*) mais c'est un point important à noter dans la manière de son fonctionnement et surtout dans le regard critique à adopter vis-à-vis des scores retournés par l'API.
+
+Un autre point important à noter est la contrainte sur la fourchette de valeurs que peut prendre le salaire lors d'une prédiction à la volée. Le salaire que l'on renseigne doit être compris entre les valeurs minimum et maximum que la base de données contient. Cette contrainte a été rajoutée pour éviter des erreurs qui apparaissent lorsque l'utilisateur souhaite comparer sa situation à celle de la base de données.
+
+Si le salaire renseigné est trop bas ou trop haut comparé aux valeurs de la base de données, alors l'API ne sera pas en mesure de renvoyer une réponse ayant du sens. D'autres mesures auraient pû être mises en place pour éviter cela, comme renvoyer une réponse pré-construite dans le cas ou le salaire est vu comme une valeur extrême haute ou basse.
+
+Une fois de plus, la solution de la constriction du salaire a été mise en place simplement pour éviter des scripts d'erreur et permet de prouver la faisabilité du projet.
